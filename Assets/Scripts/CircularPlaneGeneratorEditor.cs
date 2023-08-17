@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(CircularPlaneGenerator))]
-public class CircularPlaneGeneratorEditor : Editor
+//[CustomEditor(typeof(CircularPlaneGenerator))]
+public class CircularPlaneGeneratorEditor /*: Editor*/
 {
-    public override void OnInspectorGUI()
+   /* public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
@@ -16,5 +16,5 @@ public class CircularPlaneGeneratorEditor : Editor
         {
             generator.GenerateCircularMesh(); // Call the new method
         }
-    }
+    }*/
 }

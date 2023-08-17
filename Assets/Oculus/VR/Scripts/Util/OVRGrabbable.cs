@@ -1,10 +1,8 @@
-
-
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-
+using System.Collections;
+using UnityEngine.UI;
 /// <summary>
 /// An object that can be grabbed and thrown by OVRGrabber.
 /// </summary>
@@ -12,7 +10,8 @@ using UnityEngine.SceneManagement;
 public class OVRGrabbable : MonoBehaviour
 {
 
-    
+    // Add a public field for the UI Text
+    public Text countdownText;
 
     [SerializeField]
     protected bool m_allowOffhandGrab = true;
@@ -32,6 +31,7 @@ public class OVRGrabbable : MonoBehaviour
     protected bool m_grabbedKinematic = false;
     protected Collider m_grabbedCollider = null;
     protected OVRGrabber m_grabbedBy = null;
+    private bool isLoading = false;
 
     /// <summary>
     /// If true, the object can currently be grabbed.
@@ -110,10 +110,39 @@ public class OVRGrabbable : MonoBehaviour
     /// </summary>
     virtual public void GrabBegin(OVRGrabber hand, Collider grabPoint)
     {
-        SceneManager.LoadScene(1);
+        
+        if (!isLoading && countdownText !=null)
+        {
+            isLoading = true;
+            StartCoroutine(LoadSceneWithDelay(3f));
+        }
         m_grabbedBy = hand;
         m_grabbedCollider = grabPoint;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
+    }
+    private IEnumerator LoadSceneWithDelay(float delay)
+    {
+        float countdown = delay;
+
+        // Update the UI text with the countdown value
+        while (countdown > 0)
+        {
+            if (countdownText != null)
+            {
+                countdownText.text = countdown.ToString("F1"); // Display with one decimal place
+            }
+
+            yield return new WaitForSeconds(1f);
+            countdown -= 1f;
+        }
+
+        // Reset the UI text after the countdown is done
+        if (countdownText != null)
+        {
+            countdownText.text = "";
+        }
+
+        SceneManager.LoadScene(1);
     }
 
     /// <summary>
